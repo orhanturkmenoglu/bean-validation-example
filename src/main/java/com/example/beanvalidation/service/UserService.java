@@ -2,6 +2,7 @@ package com.example.beanvalidation.service;
 
 import com.example.beanvalidation.dto.UserRequestDto;
 import com.example.beanvalidation.dto.UserResponseDto;
+import com.example.beanvalidation.dto.UserUpdateRequestDto;
 import com.example.beanvalidation.entity.User;
 import com.example.beanvalidation.exception.UserNotFoundException;
 import com.example.beanvalidation.mapper.UserMapper;
@@ -10,8 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -25,36 +27,63 @@ public class UserService {
     @Transactional
     public UserResponseDto createUser(UserRequestDto userRequestDTO) {
         log.info("UserService::createUser started");
-        User mapToUser = this.userMapper.mapToUser(userRequestDTO);
-        User save = this.userRepository.save(mapToUser);
+
+        User user = userMapper.mapToUser(userRequestDTO);
+        User savedUser = userRepository.save(user);
+
         log.info("UserService::createUser finished");
-        return this.userMapper.mapToUserResponseDto(save);
+        return userMapper.mapToUserResponseDto(savedUser);
     }
 
-    public List<UserResponseDto> getAllUsers(String userName) {
+    @Transactional(readOnly = true)
+    public List<UserResponseDto> getAllUsers(String name) {
         log.info("UserService::getAllUsers started");
-        if (StringUtils.isNotEmpty(userName)) {
-            List<User> users = userRepository.findUserByName(userName);
+
+        if (StringUtils.isNotEmpty(name)) {
+            List<User> users = userRepository.findUserByName(name);
             return userMapper.mapToUserResponseDtoList(users);
         }
-        List<User> userList = this.userRepository.findAll();
+
+        List<User> userList = userRepository.findAll();
+
         log.info("UserService::getAllUsers finished");
-        return this.userMapper.mapToUserResponseDtoList(userList);
+        return userMapper.mapToUserResponseDtoList(userList);
     }
 
+    @Transactional(readOnly = true)
     public UserResponseDto getUserById(long userId) throws UserNotFoundException {
         log.info("UserService::getByUserId started");
-        Optional<User> optionalUser = this.userRepository.findById(userId);
+
+        Optional<User> optionalUser = userRepository.findById(userId);
         optionalUser.orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+
         log.info("UserService::getByUserId finished");
-        return this.userMapper.mapToUserResponseDto(optionalUser.get());
+        return userMapper.mapToUserResponseDto(optionalUser.get());
+    }
+
+    public UserResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto) {
+        log.info("UserService::updateUser started");
+        Optional<User> optionalUser = userRepository.findById(userUpdateRequestDto.getUserId());
+        optionalUser.orElseThrow(() -> new UserNotFoundException("User not found with userId: " + userUpdateRequestDto.getUserId()));
+
+        User user = userMapper.mapToUser(userUpdateRequestDto);
+        User updatedUser = userRepository.save(user);
+
+        log.info("UserService::updateUser finished");
+        return userMapper.mapToUserResponseDto(updatedUser);
     }
 
     @Transactional
     public void deleteUserById(long userId) throws UserNotFoundException {
+        log.info("UserService::deleteUserById started");
+
         Optional<User> optionalUser = userRepository.findById(userId);
-        optionalUser.orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+        optionalUser.orElseThrow(() -> new UserNotFoundException("User not found with userId: " + userId));
+
         userRepository.deleteById(userId);
+
+        log.info("UserService::deleteUserById finished");
     }
+
 
 }

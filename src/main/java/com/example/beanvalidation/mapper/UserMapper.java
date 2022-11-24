@@ -2,6 +2,7 @@ package com.example.beanvalidation.mapper;
 
 import com.example.beanvalidation.dto.UserRequestDto;
 import com.example.beanvalidation.dto.UserResponseDto;
+import com.example.beanvalidation.dto.UserUpdateRequestDto;
 import com.example.beanvalidation.entity.User;
 import org.springframework.stereotype.Component;
 
@@ -27,14 +28,26 @@ public class UserMapper {
                 .build();
     }
 
-    public User mapToUser(UserRequestDto userRequestDTO) {
+    public User mapToUser(UserRequestDto userRequestDto) {
         return User.builder()
-                .name(userRequestDTO.getName())
-                .email(userRequestDTO.getEmail())
-                .phoneNumber(userRequestDTO.getPhoneNumber())
-                .gender(userRequestDTO.getGender())
-                .age(userRequestDTO.getAge())
-                .nationality(userRequestDTO.getNationality())
+                .name(userRequestDto.getName())
+                .email(userRequestDto.getEmail())
+                .phoneNumber(userRequestDto.getPhoneNumber())
+                .gender(userRequestDto.getGender())
+                .age(userRequestDto.getAge())
+                .nationality(userRequestDto.getNationality())
+                .build();
+    }
+
+    public User mapToUser(UserUpdateRequestDto userUpdateRequestDto) {
+        return User.builder()
+                .id(userUpdateRequestDto.getUserId())
+                .name(userUpdateRequestDto.getName())
+                .email(userUpdateRequestDto.getEmail())
+                .phoneNumber(userUpdateRequestDto.getPhoneNumber())
+                .gender(userUpdateRequestDto.getGender())
+                .age(userUpdateRequestDto.getAge())
+                .nationality(userUpdateRequestDto.getNationality())
                 .build();
     }
 }

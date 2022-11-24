@@ -5,15 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ErrorException {
-    
-    private Date stamp;
+public class ErrorResponse implements Serializable {
+
+    private LocalDateTime timestamp;
+    private int status;
+    private String error;
     private String message;
-    private String status;
+    private String path;
 }

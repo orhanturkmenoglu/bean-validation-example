@@ -2,6 +2,7 @@ package com.example.beanvalidation.controller;
 
 import com.example.beanvalidation.dto.UserRequestDto;
 import com.example.beanvalidation.dto.UserResponseDto;
+import com.example.beanvalidation.dto.UserUpdateRequestDto;
 import com.example.beanvalidation.exception.UserNotFoundException;
 import com.example.beanvalidation.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -13,28 +14,34 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping("/users")
-    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto userRequestDTO) {
-        UserResponseDto userResponseDTO = userService.createUser(userRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
+    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto userRequestDto) {
+        UserResponseDto userResponseDto = userService.createUser(userRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<UserResponseDto>> getAllUsers(@RequestParam(value = "username",required = false) String userName) {
-        List<UserResponseDto> userResponseDTOList = userService.getAllUsers(userName);
-        return ResponseEntity.ok().body(userResponseDTOList);
+    public ResponseEntity<List<UserResponseDto>> getAllUsers(@RequestParam(value = "name", required = false) String name) {
+        List<UserResponseDto> userResponseDtoList = userService.getAllUsers(name);
+        return ResponseEntity.ok().body(userResponseDtoList);
     }
 
     @GetMapping("users/{userId}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable("userId") long userId) throws UserNotFoundException {
-        UserResponseDto userResponseDTO = userService.getUserById(userId);
-        return ResponseEntity.ok().body(userResponseDTO);
+        UserResponseDto userResponseDto = userService.getUserById(userId);
+        return ResponseEntity.ok().body(userResponseDto);
+    }
+
+    @PutMapping("/users")
+    public ResponseEntity<UserResponseDto> updateUser(@Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
+        UserResponseDto userResponseDto = userService.updateUser(userUpdateRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
 
     @DeleteMapping("/users/{userId}")

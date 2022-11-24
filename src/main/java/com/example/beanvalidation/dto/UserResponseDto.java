@@ -1,5 +1,6 @@
 package com.example.beanvalidation.dto;
 
+import com.example.beanvalidation.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class UserResponseDto implements Serializable {
     private String name;
     private String email;
     private String phoneNumber;
-    private String gender;
+    private Gender gender;
     private int age;
     private String nationality;
 }
