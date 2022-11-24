@@ -18,11 +18,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String email;
-    private String mobile;
-    private String gender;
-    private int age;
-    private String nationality;
+
+    private String name = "Admin";
+    private String email = "admin@example.com";
+    private String phoneNumber = "5417679626";
+    private String gender = "Male";
+    private int age = 18;
+    private String nationality = "Turk";
 
 }

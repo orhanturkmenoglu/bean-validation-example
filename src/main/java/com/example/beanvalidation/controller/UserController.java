@@ -26,8 +26,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
-        List<UserResponseDto> userResponseDTOList = userService.getAllUsers();
+    public ResponseEntity<List<UserResponseDto>> getAllUsers(@RequestParam(value = "username",required = false) String userName) {
+        List<UserResponseDto> userResponseDTOList = userService.getAllUsers(userName);
         return ResponseEntity.ok().body(userResponseDTOList);
     }
 

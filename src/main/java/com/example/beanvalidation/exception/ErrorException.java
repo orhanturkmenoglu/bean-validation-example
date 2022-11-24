@@ -12,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class ErrorException {
+    
     private Date stamp;
     private String message;
     private String status;

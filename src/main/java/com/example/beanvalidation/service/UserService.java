@@ -8,6 +8,7 @@ import com.example.beanvalidation.mapper.UserMapper;
 import com.example.beanvalidation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -30,8 +31,12 @@ public class UserService {
         return this.userMapper.mapToUserResponseDto(save);
     }
 
-    public List<UserResponseDto> getAllUsers() {
+    public List<UserResponseDto> getAllUsers(String userName) {
         log.info("UserService::getAllUsers started");
+        if (StringUtils.isNotEmpty(userName)) {
+            List<User> users = userRepository.findUserByName(userName);
+            return userMapper.mapToUserResponseDtoList(users);
+        }
         List<User> userList = this.userRepository.findAll();
         log.info("UserService::getAllUsers finished");
         return this.userMapper.mapToUserResponseDtoList(userList);
