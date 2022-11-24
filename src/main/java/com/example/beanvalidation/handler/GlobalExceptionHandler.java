@@ -18,11 +18,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, Object> handleInvalidArgument(MethodArgumentNotValidException exception) {
-        Map<String, Object> errorMap = new HashMap();
-        exception.getBindingResult().getFieldErrors().forEach((error) -> {
-            errorMap.put("Stamp", new Date());
-            errorMap.put(error.getField(), error.getDefaultMessage());
-            errorMap.put("status", HttpStatus.BAD_REQUEST);
+        Map<String, Object> errorMap = new HashMap<>();
+        exception.getBindingResult().getFieldErrors().forEach(error-> {
+            ErrorException builder = builder(error.getDefaultMessage());
+            errorMap.put("Stamp", builder.getStamp());
+            errorMap.put(error.getField(), builder.getMessage());
+            errorMap.put("status", builder.getStatus());
         });
         return errorMap;
     }
@@ -30,8 +31,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     public ErrorException handleUserNotFoundException(UserNotFoundException exception) {
-        ErrorException builder = builder(exception.getMessage());
-        return builder;
+        return builder(exception.getMessage());
     }
 
     private ErrorException builder(String exceptionMessage) {
