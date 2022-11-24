@@ -1,8 +1,7 @@
-
 package com.example.beanvalidation.controller;
 
 import com.example.beanvalidation.dto.UserRequestDTO;
-import com.example.beanvalidation.dto.UserResponseDTO;
+import com.example.beanvalidation.dto.UserResponseDto;
 import com.example.beanvalidation.exception.UserNotFoundException;
 import com.example.beanvalidation.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -14,26 +13,33 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping({"/api/v1/users"})
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
-        UserResponseDTO userResponseDTO = this.userService.createUser(userRequestDTO);
+    @PostMapping("/users")
+    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
+        UserResponseDto userResponseDTO = userService.createUser(userRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-        List<UserResponseDTO> userResponseDTOList = this.userService.getAllUsers();
+    @GetMapping("/users")
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+        List<UserResponseDto> userResponseDTOList = userService.getAllUsers();
         return ResponseEntity.ok().body(userResponseDTOList);
     }
 
-    @GetMapping({"/{id}"})
-    public ResponseEntity<UserResponseDTO> getByUserId(@PathVariable("id") long userId) throws UserNotFoundException {
-        UserResponseDTO userResponseDTO = this.userService.getByUserId(userId);
+    @GetMapping("users/{userId}")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable("userId") long userId) throws UserNotFoundException {
+        UserResponseDto userResponseDTO = userService.getUserById(userId);
         return ResponseEntity.ok().body(userResponseDTO);
+    }
+
+    @DeleteMapping("/users/{userId}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable("userId") long userId) throws UserNotFoundException {
+        userService.deleteUserById(userId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

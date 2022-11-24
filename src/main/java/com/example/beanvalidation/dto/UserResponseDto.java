@@ -1,4 +1,3 @@
-
 package com.example.beanvalidation.dto;
 
 import lombok.AllArgsConstructor;
@@ -10,11 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserResponseDTO {
+public class UserResponseDto {
+
     private Long userId;
     private String name;
     private String email;
-    private String mobile;
+    private String phoneNumber;
     private String gender;
     private int age;
     private String nationality;

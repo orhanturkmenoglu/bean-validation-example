@@ -12,15 +12,17 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 @Builder
 public class UserRequestDTO {
-    private @NotBlank(message = "username shouldn't be null or empty")
-    String name;
-    private @Email(message = "invalid email address")
-    String email;
-    private @Pattern(regexp = "^\\d{10}$", message = "invalid mobile number entered")
-    String mobile;
+
+    @NotBlank(message = "username must not be null or empty")
+    private String name;
+    @Email(message = "invalid email address")
+    private String email;
+    @Pattern(regexp = "^\\d{10}$", message = "invalid phone number")
+    private String phoneNumber;
     private String gender;
-    @Min(18L) @Max(65L)
+    @Min(value = 18L,message = "age must be minimum value 18 ")
+    @Max(value = 65L,message = "age must be maximum value 65")
     private int age;
-    @NotBlank
+    @NotBlank (message = "nationality must not be null or empty")
     String nationality;
 }
