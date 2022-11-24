@@ -1,6 +1,6 @@
 package com.example.beanvalidation.service;
 
-import com.example.beanvalidation.dto.UserRequestDTO;
+import com.example.beanvalidation.dto.UserRequestDto;
 import com.example.beanvalidation.dto.UserResponseDto;
 import com.example.beanvalidation.entity.User;
 import com.example.beanvalidation.exception.UserNotFoundException;
@@ -22,7 +22,7 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional
-    public UserResponseDto createUser(UserRequestDTO userRequestDTO) {
+    public UserResponseDto createUser(UserRequestDto userRequestDTO) {
         log.info("UserService::createUser started");
         User mapToUser = this.userMapper.mapToUser(userRequestDTO);
         User save = this.userRepository.save(mapToUser);

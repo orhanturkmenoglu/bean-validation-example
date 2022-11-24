@@ -1,6 +1,6 @@
 package com.example.beanvalidation.mapper;
 
-import com.example.beanvalidation.dto.UserRequestDTO;
+import com.example.beanvalidation.dto.UserRequestDto;
 import com.example.beanvalidation.dto.UserResponseDto;
 import com.example.beanvalidation.entity.User;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class UserMapper {
                 .build();
     }
 
-    public User mapToUser(UserRequestDTO userRequestDTO) {
+    public User mapToUser(UserRequestDto userRequestDTO) {
         return User.builder()
                 .name(userRequestDTO.getName())
                 .email(userRequestDTO.getEmail())

@@ -1,6 +1,6 @@
 package com.example.beanvalidation.controller;
 
-import com.example.beanvalidation.dto.UserRequestDTO;
+import com.example.beanvalidation.dto.UserRequestDto;
 import com.example.beanvalidation.dto.UserResponseDto;
 import com.example.beanvalidation.exception.UserNotFoundException;
 import com.example.beanvalidation.service.UserService;
@@ -20,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/users")
-    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
+    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto userRequestDTO) {
         UserResponseDto userResponseDTO = userService.createUser(userRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
     }
