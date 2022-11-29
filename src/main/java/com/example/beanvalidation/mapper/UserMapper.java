@@ -15,7 +15,6 @@ public class UserMapper {
     public List<UserResponseDto> mapToUserResponseDtoList(List<User> users) {
         return users.stream().map(this::mapToUserResponseDto).collect(Collectors.toList());
     }
-
     public UserResponseDto mapToUserResponseDto(User user) {
         return UserResponseDto.builder()
                 .userId(user.getId())

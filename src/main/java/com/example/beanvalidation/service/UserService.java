@@ -10,11 +10,13 @@ import com.example.beanvalidation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -36,15 +38,20 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserResponseDto> getAllUsers(String name) {
+    public List<UserResponseDto> getAllUsers(String name, String sortBy) {
         log.info("UserService::getAllUsers started");
 
+        List<User> userList;
         if (StringUtils.isNotEmpty(name)) {
-            List<User> users = userRepository.findUserByName(name);
-            return userMapper.mapToUserResponseDtoList(users);
+            userList = userRepository.findByName(name);
+            userMapper.mapToUserResponseDtoList(userList);
+        }
+        if (StringUtils.isNotEmpty(sortBy)) {
+            userList = userRepository.findAll(Sort.by(Sort.Direction.ASC, sortBy));
+            userMapper.mapToUserResponseDtoList(userList);
         }
 
-        List<User> userList = userRepository.findAll();
+        userList = userRepository.findAll();
 
         log.info("UserService::getAllUsers finished");
         return userMapper.mapToUserResponseDtoList(userList);
@@ -60,6 +67,42 @@ public class UserService {
         log.info("UserService::getByUserId finished");
         return userMapper.mapToUserResponseDto(optionalUser.get());
     }
+
+     @Transactional
+     public List<UserResponseDto> getUsers(Integer age, String sortBy, String direction, int page, int pageSize) {
+         List<User> userList ;
+         Sort sort = getSort(sortBy, direction);
+         PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
+         if (Objects.nonNull(age)) {
+             userList = userRepository.findByAge(age, pageRequest, sort);
+         } else {
+             userList = userRepository.findByName(sortBy, pageRequest, sort);
+         }
+         return userMapper.mapToUserResponseDtoList(userList);
+     }
+
+     private Sort getSort(String sortBy, String direction) {
+         if ("asc".equals(direction)) {
+             return Sort.by(sortBy).ascending();
+         }
+         return Sort.by(sortBy).descending();
+     }
+    @Transactional
+    public List<UserResponseDto> getUsersNationality(String nationality, String sortBy, String direction) {
+        log.info("UserService::getUsersNationality started::");
+
+        List<User> userList;
+
+        if (StringUtils.isNotEmpty(sortBy) && StringUtils.isNotEmpty(direction)) {
+            userList = userRepository.findByNationality(nationality, Sort.by(Sort.Direction.fromString(direction), sortBy));
+        } else {
+            userList = userRepository.findByNationality(nationality);
+        }
+
+        log.info("UserService::getUsersNationality finished");
+        return userMapper.mapToUserResponseDtoList(userList);
+    }
+
 
     public UserResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto) {
         log.info("UserService::updateUser started");

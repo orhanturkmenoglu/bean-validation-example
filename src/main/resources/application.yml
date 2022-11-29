@@ -3,16 +3,19 @@ server:
   servlet:
     context-path: /api/v1
 
+
 spring:
   main:
     banner-mode: off
-  h2:
-    console:
-      enabled: true
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:postgresql://localhost:5433/TestDB
+    username: postgres
+    password: 12345
   jpa:
     show-sql: true
+    database: postgresql
+    hibernate:
+      ddl-auto: update
 
 
 

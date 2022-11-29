@@ -19,19 +19,21 @@ public class UserRequestDto implements Serializable {
     private String name;
 
     @NotBlank(message = "Email must not be null or empty")
-    @Email(message = "Email is not valid ",regexp = "^(.+)@(.+)$")
+    @Email(message = "Email is not valid ", regexp = "^(.+)@(.+)$")
     private String email;
 
-    @NotBlank(message ="Phone number must not be null or empty")
+    @NotBlank(message = "Phone number must not be null or empty")
     @Pattern(regexp = "^(\\+)?(90)?(5\\d{2})(\\d{3})(\\d{2})(\\d{2})$", message = "Phone Number is not valid ")
     private String phoneNumber;
 
     @NotNull(message = "Gender must not be null")
     private Gender gender;
 
-    @Min(value = 18L,message = "Age must be minimum value 18 ")
-    @Max(value = 65L,message = "Age must be maximum value 65")
+    @NotNull(message = "Age must not be null")
+    @Min(value = 18L, message = "Age must be minimum value 18 ")
+    @Max(value = 65L, message = "Age must be maximum value 65")
     private int age;
 
-    @Builder.Default private String nationality="TR";
+    @Builder.Default
+    private String nationality = "TR";
 }
