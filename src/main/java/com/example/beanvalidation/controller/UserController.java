@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/users/filter")
-    public ResponseEntity<List<UserResponseDto>> getUsersFilter(@RequestParam(value = "age", required = false) Integer age,
+    public ResponseEntity<List<UserResponseDto>> getFilterUsers(@RequestParam(value = "age", required = false) Integer age,
                                                                 @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
                                                                 @RequestParam(value = "direction", defaultValue = "asc") String direction,
                                                                 @RequestParam(value = "page", defaultValue = "1") int page,
@@ -49,8 +49,8 @@ public class UserController {
         return ResponseEntity.ok().body(userResponseDtoList);
     }
 
-    @GetMapping("/users/")
-    public ResponseEntity<List<UserResponseDto>> getUsersNationalityFilter(@RequestParam(value = "nationality") String nationality,
+    @GetMapping("/users")
+    public ResponseEntity<List<UserResponseDto>> getUsersFilterNationality(@RequestParam(value = "nationality") String nationality,
                                                                            @RequestParam(value = "sortBy", required = false) String sortBy,
                                                                            @RequestParam(value = "direction", required = false) String direction) {
         List<UserResponseDto> userResponseDtoList = userService.getUsersNationality(nationality, sortBy, direction);
