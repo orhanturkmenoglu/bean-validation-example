@@ -4,6 +4,7 @@ import com.example.beanvalidation.dto.UserRequestDto;
 import com.example.beanvalidation.dto.UserResponseDto;
 import com.example.beanvalidation.dto.UserUpdateRequestDto;
 import com.example.beanvalidation.entity.User;
+import com.example.beanvalidation.enums.Gender;
 import com.example.beanvalidation.exception.UserNotFoundException;
 import com.example.beanvalidation.mapper.UserMapper;
 import com.example.beanvalidation.repository.UserRepository;
@@ -68,25 +69,6 @@ public class UserService {
         return userMapper.mapToUserResponseDto(optionalUser.get());
     }
 
-     @Transactional
-     public List<UserResponseDto> getUsers(Integer age, String sortBy, String direction, int page, int pageSize) {
-         List<User> userList ;
-         Sort sort = getSort(sortBy, direction);
-         PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
-         if (Objects.nonNull(age)) {
-             userList = userRepository.findByAge(age, pageRequest, sort);
-         } else {
-             userList = userRepository.findByName(sortBy, pageRequest, sort);
-         }
-         return userMapper.mapToUserResponseDtoList(userList);
-     }
-
-     private Sort getSort(String sortBy, String direction) {
-         if ("asc".equals(direction)) {
-             return Sort.by(sortBy).ascending();
-         }
-         return Sort.by(sortBy).descending();
-     }
     @Transactional
     public List<UserResponseDto> getUsersNationality(String nationality, String sortBy, String direction) {
         log.info("UserService::getUsersNationality started::");
@@ -103,7 +85,32 @@ public class UserService {
         return userMapper.mapToUserResponseDtoList(userList);
     }
 
+    @Transactional
+    public List<UserResponseDto> getUsersGender(Gender gender, String sortBy, String direction, Integer page, Integer pageSize) {
+        List<User> userList = null;
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
 
+        if (Objects.nonNull(gender)) {
+            userList = userRepository.findByGender(gender);
+            userMapper.mapToUserResponseDtoList(userList);
+        }
+        if (StringUtils.isNotEmpty(sortBy)) {
+            userList = userRepository.findByGender(gender, Sort.by(sortBy));
+            userMapper.mapToUserResponseDtoList(userList);
+        }
+        if (StringUtils.isNotEmpty(direction)) {
+            userList = userRepository.findByGender(gender, Sort.by(Sort.Direction.fromString(direction), sortBy));
+            userMapper.mapToUserResponseDtoList(userList);
+        }
+        if (Objects.nonNull(pageRequest)) {
+            userList = userRepository.findByGender(gender, Sort.by(Sort.Direction.fromString(direction), sortBy), pageRequest);
+            userMapper.mapToUserResponseDtoList(userList);
+        }
+
+        return userMapper.mapToUserResponseDtoList(userList);
+    }
+
+    @Transactional
     public UserResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto) {
         log.info("UserService::updateUser started");
         Optional<User> optionalUser = userRepository.findById(userUpdateRequestDto.getUserId());

@@ -13,12 +13,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class UserResponseDto implements Serializable {
-
     private Long userId;
     private String name;
     private String email;
     private String phoneNumber;
     private Gender gender;
     private int age;
+    private String city;
     private String nationality;
 }

@@ -35,6 +35,7 @@ public class UserUpdateRequestDto {
     @Max(value = 65L, message = "Age must be maximum value 65")
     private int age;
 
+    private String city;
     @Builder.Default
     private String nationality = "TR";
 }

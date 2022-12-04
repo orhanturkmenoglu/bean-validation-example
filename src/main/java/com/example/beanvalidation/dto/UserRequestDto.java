@@ -33,7 +33,8 @@ public class UserRequestDto implements Serializable {
     @Min(value = 18L, message = "Age must be minimum value 18 ")
     @Max(value = 65L, message = "Age must be maximum value 65")
     private int age;
-
+    
+    private String city;
     @Builder.Default
     private String nationality = "TR";
 }
