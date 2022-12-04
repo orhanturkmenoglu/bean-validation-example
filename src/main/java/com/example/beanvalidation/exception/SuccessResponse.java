@@ -1,4 +1,4 @@
-package com.example.beanvalidation.handler;
+package com.example.beanvalidation.exception;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ResponseHandler {
+public class SuccessResponse {
 
     public static <T> ResponseEntity<T> responseBuilder(String message, HttpStatus httpStatus, T data) {
         return getResponseEntity(message, httpStatus, data);
