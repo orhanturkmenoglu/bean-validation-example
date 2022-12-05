@@ -44,14 +44,21 @@ public class UserService {
     public List<UserResponseDto> getAllUsers(String name, String sortBy) {
         log.info("UserService::getAllUsers started");
 
-        if (StringUtils.isNotEmpty(name)) {
+        if (StringUtils.isNotEmpty(name) && StringUtils.isEmpty(sortBy)) {
             userList = userRepository.findByName(name);
-            userMapper.mapToUserResponseDtoList(userList);
+            return userMapper.mapToUserResponseDtoList(userList);
         }
-        if (StringUtils.isNotEmpty(sortBy)) {
+
+        if (StringUtils.isEmpty(name) && StringUtils.isNotEmpty(sortBy)) {
             userList = userRepository.findAll(Sort.by(Sort.Direction.ASC, sortBy));
-            userMapper.mapToUserResponseDtoList(userList);
+            return userMapper.mapToUserResponseDtoList(userList);
         }
+
+        if (StringUtils.isNotEmpty(name) && StringUtils.isNotEmpty(sortBy)) {
+            userList = userRepository.findByName(name, Sort.by(Sort.Direction.ASC, sortBy));
+            return userMapper.mapToUserResponseDtoList(userList);
+        }
+
 
         userList = userRepository.findAll();
 

@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByName(String name);
+    List<User> findByName(String name,Sort sortBy);
 
     List<User> findByNationality(String nationality, Sort sortBy);
 
